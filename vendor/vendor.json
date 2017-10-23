@@ -1,0 +1,31 @@
+{
+	"comment": "",
+	"ignore": "test",
+	"package": [
+		{
+			"checksumSHA1": "0cdNscA7+z4+lKF5usZYz3it/04=",
+			"path": "github.com/joho/godotenv",
+			"revision": "a79fa1e548e2c689c241d10173efd51e5d689d5b",
+			"revisionTime": "2017-09-18T06:32:59Z"
+		},
+		{
+			"checksumSHA1": "UE4lhbPYYWEhqHXQk24OA73m5+8=",
+			"path": "github.com/joho/godotenv/autoload",
+			"revision": "a79fa1e548e2c689c241d10173efd51e5d689d5b",
+			"revisionTime": "2017-09-18T06:32:59Z"
+		},
+		{
+			"checksumSHA1": "g2u59fTBXlPh360x+Ydq3DMclHA=",
+			"path": "github.com/lunny/dingtalk_webhook",
+			"revision": "979f7da2d4bc07d4207dabe56e269931ae7f3bfa",
+			"revisionTime": "2017-10-23T08:16:12Z"
+		},
+		{
+			"checksumSHA1": "//PGV0UoXQQwyGNI1/3Wpq/BxJE=",
+			"path": "github.com/urfave/cli",
+			"revision": "ac249472b7de27a9e8990819566d9be95ab5b816",
+			"revisionTime": "2017-09-26T03:41:18Z"
+		}
+	],
+	"rootPath": "github.com/lunny/drone-dingtalk"
+}
