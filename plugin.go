@@ -8,6 +8,7 @@ import (
 	"errors"
 	"fmt"
 	"log"
+	"strings"
 
 	"github.com/lunny/dingtalk_webhook"
 )
@@ -41,6 +42,7 @@ type (
 	Config struct {
 		AccessToken string
 		Message     string
+		Lang        string
 		IsAtAll     bool
 		Drone       bool
 		Username    string
@@ -77,13 +79,47 @@ func (p *Plugin) Exec() error {
 	return p.Webhook.SendTextMsg(p.Config.Message, p.Config.IsAtAll)
 }
 
+func (p *Plugin) getTemplate(event string) string {
+	if p.Config.Lang == "zh_CN" {
+		switch p.Build.Event {
+		case "push":
+			return `# [%s](%s)
+		
+![avatar](%s) %s 推送到 %s 的 %s 分支 %s`
+		case "pull_request":
+			return "%s 更新了 %s 合并请求 %s"
+		case "tag":
+			return "%s 推送了 %s 标签 %s"
+		}
+	} else {
+		switch p.Build.Event {
+		case "push":
+			return `# [%s](%s)
+
+![avatar](%s) %s pushed to %s branch %s %s`
+		case "pull_request":
+			return "%s updated %s pull request %s"
+		case "tag":
+			return "%s pushed %s tag %s"
+		}
+	}
+	return ""
+}
+
 // DroneTemplate is plugin default template for Drone CI.
 func (p *Plugin) DroneTemplate() *dingtalk.Payload {
 	description := ""
-	//Color:       p.Color(),
+
 	switch p.Build.Event {
 	case "push":
-		description = fmt.Sprintf("%s pushed to %s", p.Build.Author, p.Build.Branch)
+		description = fmt.Sprintf(p.getTemplate(p.Build.Event),
+			strings.TrimSpace(p.Build.Message),
+			p.Build.Link,
+			p.Config.AvatarURL,
+			p.Build.Author,
+			p.Repo.Owner+"/"+p.Repo.Name,
+			p.Build.Branch,
+			p.Build.Status)
 	case "pull_request":
 		branch := ""
 		if p.Build.RefSpec != "" {
@@ -91,9 +127,9 @@ func (p *Plugin) DroneTemplate() *dingtalk.Payload {
 		} else {
 			branch = p.Build.Branch
 		}
-		description = fmt.Sprintf("%s updated pull request %s", p.Build.Author, branch)
+		description = fmt.Sprintf(p.getTemplate(p.Build.Event), p.Build.Author, p.Repo.Owner+"/"+p.Repo.Name, branch)
 	case "tag":
-		description = fmt.Sprintf("%s pushed tag %s", p.Build.Author, p.Build.Branch)
+		description = fmt.Sprintf(p.getTemplate(p.Build.Event), p.Build.Author, p.Repo.Owner+"/"+p.Repo.Name, p.Build.Branch)
 	}
 
 	return &dingtalk.Payload{

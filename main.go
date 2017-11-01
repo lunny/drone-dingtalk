@@ -39,6 +39,11 @@ func main() {
 			Usage:  "the message contents (up to 2000 characters)",
 			EnvVar: "PLUGIN_MESSAGE,MESSAGE",
 		},
+		cli.StringFlag{
+			Name:   "lang",
+			Usage:  "the lang display (zh_CN or en_US, en_US is default)",
+			EnvVar: "PLUGIN_LANG,LANG",
+		},
 		cli.BoolFlag{
 			Name:   "drone",
 			Usage:  "environment is drone",
@@ -165,6 +170,7 @@ func run(c *cli.Context) error {
 		Config: Config{
 			AccessToken: c.String("access_token"),
 			Message:     c.String("message"),
+			Lang:        c.String("lang"),
 			IsAtAll:     c.Bool("is_at_all"),
 			Drone:       c.Bool("drone"),
 		},
