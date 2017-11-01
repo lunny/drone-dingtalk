@@ -39,21 +39,6 @@ func main() {
 			Usage:  "the message contents (up to 2000 characters)",
 			EnvVar: "PLUGIN_MESSAGE,MESSAGE",
 		},
-		cli.StringFlag{
-			Name:   "color",
-			Usage:  "color code of the embed",
-			EnvVar: "PLUGIN_COLOR,COLOR",
-		},
-		cli.StringFlag{
-			Name:   "username",
-			Usage:  "override the default username of the webhook",
-			EnvVar: "PLUGIN_USERNAME,USERNAME",
-		},
-		cli.StringFlag{
-			Name:   "avatar-url",
-			Usage:  "override the default avatar of the webhook",
-			EnvVar: "PLUGIN_AVATAR_URL,AVATAR_URL",
-		},
 		cli.BoolFlag{
 			Name:   "drone",
 			Usage:  "environment is drone",
@@ -180,11 +165,8 @@ func run(c *cli.Context) error {
 		Config: Config{
 			AccessToken: c.String("access_token"),
 			Message:     c.String("message"),
-			Color:       c.String("color"),
 			IsAtAll:     c.Bool("is_at_all"),
 			Drone:       c.Bool("drone"),
-			Username:    c.String("username"),
-			AvatarURL:   c.String("avatar-url"),
 		},
 	}
 

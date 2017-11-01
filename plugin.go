@@ -8,8 +8,6 @@ import (
 	"errors"
 	"fmt"
 	"log"
-	"strconv"
-	"strings"
 
 	"github.com/lunny/dingtalk_webhook"
 )
@@ -42,7 +40,6 @@ type (
 	// Config for the plugin.
 	Config struct {
 		AccessToken string
-		Color       string
 		Message     string
 		IsAtAll     bool
 		Drone       bool
@@ -63,14 +60,14 @@ type (
 func (p *Plugin) Exec() error {
 	if len(p.Config.AccessToken) == 0 {
 		log.Println("missing dingtalk config")
-
 		return errors.New("missing dingtalk config")
 	}
 
 	p.Webhook = dingtalk.NewWebhook(p.Config.AccessToken)
 
 	if len(p.Config.Message) == 0 {
-		return nil
+		log.Println("missing message to send")
+		return errors.New("missing message to send")
 	}
 
 	if p.Config.Drone {
@@ -123,27 +120,5 @@ func (p *Plugin) DroneTemplate() *dingtalk.Payload {
 			SingleTitle:    "Drone",
 			SingleURL:      p.Build.Link,
 		},
-	}
-}
-
-// Color code of the embed
-func (p *Plugin) Color() int {
-	if p.Config.Color != "" {
-		p.Config.Color = strings.Replace(p.Config.Color, "#", "", -1)
-		if s, err := strconv.ParseInt(p.Config.Color, 16, 32); err == nil {
-			return int(s)
-		}
-	}
-
-	switch p.Build.Status {
-	case "success":
-		// #1ac600 green
-		return 1754624
-	case "failure", "error", "killed":
-		// #ff3232 red
-		return 16724530
-	default:
-		// #ffd930 yellow
-		return 16767280
 	}
 }
