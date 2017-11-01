@@ -65,16 +65,16 @@ func (p *Plugin) Exec() error {
 
 	p.Webhook = dingtalk.NewWebhook(p.Config.AccessToken)
 
-	if len(p.Config.Message) == 0 {
-		log.Println("missing message to send")
-		return errors.New("missing message to send")
-	}
-
 	if p.Config.Drone {
 		err := p.Webhook.SendPayload(p.DroneTemplate())
 		if err != nil {
 			return err
 		}
+	}
+
+	if len(p.Config.Message) == 0 {
+		log.Println("missing message to send")
+		return errors.New("missing message to send")
 	}
 
 	return p.Webhook.SendTextMsg(p.Config.Message, p.Config.IsAtAll)
