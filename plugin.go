@@ -66,10 +66,7 @@ func (p *Plugin) Exec() error {
 	p.Webhook = dingtalk.NewWebhook(p.Config.AccessToken)
 
 	if p.Config.Drone {
-		err := p.Webhook.SendPayload(p.DroneTemplate())
-		if err != nil {
-			return err
-		}
+		return p.Webhook.SendPayload(p.DroneTemplate())
 	}
 
 	if len(p.Config.Message) == 0 {
