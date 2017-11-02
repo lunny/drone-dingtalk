@@ -85,7 +85,7 @@ func (p *Plugin) getTemplate(event string) string {
 		case "push":
 			return `# [%s](%s)
 		
-![avatar](%s) %s 推送到 %s 的 %s 分支 %s`
+%s 推送到 %s 的 %s 分支 %s`
 		case "pull_request":
 			return "%s 更新了 %s 合并请求 %s"
 		case "tag":
@@ -96,7 +96,7 @@ func (p *Plugin) getTemplate(event string) string {
 		case "push":
 			return `# [%s](%s)
 
-![avatar](%s) %s pushed to %s branch %s %s`
+%s pushed to %s branch %s %s`
 		case "pull_request":
 			return "%s updated %s pull request %s"
 		case "tag":
@@ -115,7 +115,6 @@ func (p *Plugin) DroneTemplate() *dingtalk.Payload {
 		description = fmt.Sprintf(p.getTemplate(p.Build.Event),
 			strings.TrimSpace(p.Build.Message),
 			p.Build.Link,
-			p.Config.AvatarURL,
 			p.Build.Author,
 			p.Repo.Owner+"/"+p.Repo.Name,
 			p.Build.Branch,
@@ -148,7 +147,7 @@ func (p *Plugin) DroneTemplate() *dingtalk.Payload {
 		}{
 			Title:          p.Build.Message,
 			Text:           description,
-			HideAvatar:     "0",
+			HideAvatar:     "1",
 			BtnOrientation: "0",
 			SingleTitle:    "Drone",
 			SingleURL:      p.Build.Link,
